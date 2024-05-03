@@ -1,3 +1,4 @@
+using System.Globalization;
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -8,7 +9,8 @@ public static class ArraysTester {
         double[] multiples = MultiplesOf(7, 5);
         Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{7, 14, 21, 28, 35}
         multiples = MultiplesOf(1.5, 10);
-        Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0}
+        //Format output so decimal numbers are shown after a point, not a comma
+        Console.WriteLine($"<double>{{{string.Join(", ", multiples.Select(x => x.ToString("0.0", CultureInfo.InvariantCulture)))}}}");
         multiples = MultiplesOf(-2, 10);
         Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{-2, -4, -6, -8, -10, -12, -14, -16, -18, -20}
 
@@ -39,7 +41,19 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        //Initialize double array
+        double[] multiplies = new double[length];
+        int index = 0;
+        
+        //Creates a for loop for finding the number of multiples selected of the number
+        for (double i = number; index < length; i += number) {
+            //Checks if it is multiple of number
+            if (i % number == 0){
+                multiplies[index] = i; //Adds the number to the list
+                index += 1; //Increases count number
+            }
+        }
+        return multiplies;
     }
     
     /// <summary>
@@ -57,5 +71,15 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+        //Finds the starting place of the items that will be taken off
+        int start = data.Count - amount;
+        //Gets the items that will be rotated using GetRange
+        List<int> rotatedList = data.GetRange(start, amount);
+        //Removes the selected items from the list passing a range
+        data.RemoveRange(start, amount);
+        //Inserts the seleted items into the begining of the list passing as first parameter 0 and then the items, we use InsertRange
+        data.InsertRange(0, rotatedList);
+
+        
     }
 }
